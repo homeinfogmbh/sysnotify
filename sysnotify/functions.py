@@ -4,16 +4,15 @@ from collections import defaultdict
 from datetime import datetime
 from ipaddress import IPv4Address, IPv6Address, ip_address
 from re import fullmatch
-from typing import Union
+from typing import Iterable, Union
 
 from peewee import Select
 
 from hwdb import System
 
-from sysnotify.journalctl import journalctl
-
 
 IPAddress = Union[IPv4Address, IPv6Address]
+Connections = dict[str, dict[datetime, IPAddress]]
 OPENVPN_SERVER = 'openvpn-server@terminals.service'
 VERIFY_ERROR = r'(.+):\d+ VERIFY ERROR: .+ CN=([0-9.]+)(?:, .+|$)'
 VERIFY_OK = r'(.+):\d+ VERIFY OK: .+ CN=([0-9.]+)(?:, .+|$)'
@@ -25,18 +24,14 @@ def systems_to_migrate_to_wg() -> Select:
     return System.select(cascade=True).where(System.pubkey >> None)
 
 
-def filter_connections(
-        regex: str,
-        unit: str = OPENVPN_SERVER,
-        since: Union[datetime, str] = 'today'
-) -> dict[str, dict[datetime, IPAddress]]:
+def filter_connections(regex: str, records: Iterable[dict]) -> Connections:
     """Returns a dict of OpenVPN keys that match the regular expression
     with the respective datetime and IP address.
     """
 
     result = defaultdict(dict)
 
-    for record in journalctl(unit, since=since, all=True):
+    for record in records:
         if match := fullmatch(regex, record['MESSAGE']):
             ip, key = match.groups()
             timestamp = datetime.fromtimestamp(
@@ -47,23 +42,17 @@ def filter_connections(
     return dict(result)
 
 
-def failed_connections(
-        unit: str = OPENVPN_SERVER,
-        since: Union[datetime, str] = 'today'
-) -> dict[str, dict[datetime, IPAddress]]:
+def failed_connections(records: Iterable[dict]) -> Connections:
     """Returns a dict of OpenVPN keys that failed to connect
     with the respective datetime and IP address.
     """
 
-    return filter_connections(VERIFY_ERROR, unit, since)
+    return filter_connections(VERIFY_ERROR, records)
 
 
-def successful_connections(
-        unit: str = OPENVPN_SERVER,
-        since: Union[datetime, str] = 'today'
-) -> dict[str, dict[datetime, IPAddress]]:
+def successful_connections(records: Iterable[dict]) -> Connections:
     """Returns a dict of OpenVPN keys that successfully connected
     with the respective datetime and IP address.
     """
 
-    return filter_connections(VERIFY_OK, unit, since)
+    return filter_connections(VERIFY_OK, records)
