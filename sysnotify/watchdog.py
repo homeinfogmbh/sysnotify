@@ -63,7 +63,7 @@ def get_last_connection(
 ) -> SystemConnection:
     """Returns the last connection of the given system."""
 
-    for timestamp in sorted(connections.items(), reverse=True):
+    for timestamp in sorted(connections, reverse=True):
         return SystemConnection(system, timestamp, connections[timestamp])
 
     raise KeyError('No system connection found.')
