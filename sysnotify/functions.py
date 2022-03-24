@@ -29,7 +29,7 @@ def systems_to_migrate_to_wg() -> Select:
 
 def failed_connection_ips(
         unit: str = OPENVPN_SERVER,
-        since: datetime | str = 'today'
+        since: Union[datetime, str] = 'today'
 ) -> dict[str, dict[datetime, IPAddress]]:
     """Returns a dict of OpenVPN keys that failed to connect
     with the respective date and IP address.
