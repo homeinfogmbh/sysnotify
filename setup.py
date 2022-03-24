@@ -21,9 +21,7 @@ setup(
     packages=['sysmon'],
     entry_points={
         'console_scripts': [
-            'sysmon = sysmon.daemon:spawn',
-            'sysmon-cleanup = sysmon.cleanup:main',
-            'sysmon-notify = sysmon.notify:notify'
+            'sysnotify = sysnotify.watchdog:check_systems'
         ]
     },
     license='GPLv3',
