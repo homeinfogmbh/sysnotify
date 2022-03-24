@@ -27,7 +27,7 @@ def check_systems() -> None:
 
     config = ConfigParser()
     config.read(CONFIG_FILE)
-    recipients = map(str.strip, config.get('mail', 'recipients').split(','))
+    recipients = map(str.strip, config.get('email', 'recipients').split(','))
     records = list(journalctl(OPENVPN_SERVER, since='today', all=True))
     failures = failed_connections(records)
     connections = successful_connections(records)
