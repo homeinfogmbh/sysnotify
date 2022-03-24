@@ -6,6 +6,8 @@ from ipaddress import IPv4Address, IPv6Address, ip_address
 from re import fullmatch
 from typing import Union
 
+from peewee import Select
+
 from hwdb import System
 
 from sysnotify.journalctl import journalctl
@@ -19,10 +21,10 @@ REGEX = (
 )
 
 
-def systems_to_migrate_to_wg():
+def systems_to_migrate_to_wg() -> Select:
     """Selects systems to migrate to WireGuard."""
 
-    System.select(cascade=True).where(System.pubkey >> None)
+    return System.select(cascade=True).where(System.pubkey >> None)
 
 
 def failed_connection_ips(

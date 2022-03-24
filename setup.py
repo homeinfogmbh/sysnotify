@@ -11,6 +11,7 @@ setup(
     install_requires=[
         'emaillib',
         'hwdb',
+        'peewee',
         'setuptools'
     ],
     author='HOMEINFO - Digitale Informationssysteme GmbH',
