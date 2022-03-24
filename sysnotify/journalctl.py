@@ -10,7 +10,7 @@ from typing import Any, Iterator, Optional, Union
 __all__ = ['journalctl']
 
 
-JOURNALCTL = '/usr/bin/journalctl'
+JOURNALCTL = '/bin/journalctl'
 
 
 def journalctl(
