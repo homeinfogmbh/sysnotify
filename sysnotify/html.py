@@ -1,6 +1,6 @@
 """HTML text generation."""
 
-from xml.etree.ElementTree import Element, SubElement
+from xml.etree.ElementTree import Element, SubElement, tostring
 
 from typing import Iterable
 
@@ -13,13 +13,13 @@ __all__ = ['to_html']
 def to_html(
         failures: Iterable[SystemConnection],
         connections: Iterable[SystemConnection]
-) -> Element:
+) -> str:
     """Returns the HTML body."""
 
     body = Element('body')
     add_table(body, 'Failed connections', failures)
     add_table(body, 'Successful connections', connections)
-    return body
+    return tostring(body, encoding='unicode', method='html')
 
 
 def add_table(
