@@ -3,6 +3,7 @@
 from collections import defaultdict
 from datetime import datetime
 from ipaddress import ip_address
+from logging import getLogger
 from re import fullmatch
 from typing import Iterable
 
@@ -12,6 +13,7 @@ from sysnotify.typing import Connections
 __all__ = ['failed_connections', 'successful_connections']
 
 
+LOGGER = getLogger(__file__)
 VERIFY_ERROR = r'(.+):\d+ VERIFY ERROR: .+ CN=([0-9.]+)(?:, .+|$)'
 VERIFY_OK = r'(.+):\d+ VERIFY OK: .+ CN=([0-9.]+)(?:, .+|$)'
 
@@ -29,7 +31,11 @@ def filter_connections(regex: str, records: Iterable[dict]) -> Connections:
             timestamp = datetime.fromtimestamp(
                 int(record['__REALTIME_TIMESTAMP']) / 1_000_000
             )
-            result[key][timestamp] = ip_address(ip)
+
+            try:
+                result[key][timestamp] = ip_address(ip)
+            except ValueError:
+                LOGGER.error('Garbage record: %s', record['MESSAGE'])
 
     return dict(result)
 
