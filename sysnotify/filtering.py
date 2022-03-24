@@ -27,7 +27,7 @@ def filter_connections(regex: str, records: Iterable[dict]) -> Connections:
         if match := fullmatch(regex, record['MESSAGE']):
             ip, key = match.groups()
             timestamp = datetime.fromtimestamp(
-                record['__REALTIME_TIMESTAMP'] / 1_000_000
+                int(record['__REALTIME_TIMESTAMP']) / 1_000_000
             )
             result[key][timestamp] = ip_address(ip)
 
