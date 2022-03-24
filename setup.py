@@ -18,7 +18,7 @@ setup(
     author_email='<info at homeinfo dot de>',
     maintainer='Richard Neumann',
     maintainer_email='<r dot neumann at homeinfo priod de>',
-    packages=['sysmon'],
+    packages=['sysnotify'],
     entry_points={
         'console_scripts': [
             'sysnotify = sysnotify.watchdog:check_systems'
