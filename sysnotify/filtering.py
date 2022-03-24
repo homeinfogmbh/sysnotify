@@ -2,16 +2,16 @@
 
 from collections import defaultdict
 from datetime import datetime
-from ipaddress import IPv4Address, IPv6Address, ip_address
+from ipaddress import ip_address
 from re import fullmatch
-from typing import Iterable, Union
+from typing import Iterable
+
+from sysnotify.typing import Connections
 
 
 __all__ = ['failed_connections', 'successful_connections']
 
 
-IPAddress = Union[IPv4Address, IPv6Address]
-Connections = dict[str, dict[datetime, IPAddress]]
 VERIFY_ERROR = r'(.+):\d+ VERIFY ERROR: .+ CN=([0-9.]+)(?:, .+|$)'
 VERIFY_OK = r'(.+):\d+ VERIFY OK: .+ CN=([0-9.]+)(?:, .+|$)'
 
