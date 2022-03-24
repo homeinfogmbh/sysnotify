@@ -15,10 +15,8 @@ from sysnotify.journalctl import journalctl
 
 IPAddress = Union[IPv4Address, IPv6Address]
 OPENVPN_SERVER = 'openvpn-server@terminals.service'
-REGEX = (
-    r'(.+):\d+ VERIFY ERROR: depth=\d, error=certificate has expired: '
-    r'CN=(.+), serial=\d+'
-)
+VERIFY_ERROR = r'(.+):\d+ VERIFY ERROR: .+ CN=([0-9.]+)(?:, .+|$)'
+VERIFY_OK = r'(.+):\d+ VERIFY OK: .+ CN=([0-9.]+)(?:, .+|$)'
 
 
 def systems_to_migrate_to_wg() -> Select:
@@ -38,7 +36,7 @@ def failed_connection_ips(
     result = defaultdict(dict)
 
     for record in journalctl(unit, since=since, all=True):
-        if match := fullmatch(REGEX, record['MESSAGE']):
+        if match := fullmatch(VERIFY_ERROR, record['MESSAGE']):
             ip, key = match.groups()
             timestamp = datetime.fromtimestamp(
                 record['__REALTIME_TIMESTAMP'] / 1_000_000
