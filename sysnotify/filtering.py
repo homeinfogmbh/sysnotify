@@ -14,8 +14,8 @@ __all__ = ['failed_connections', 'successful_connections']
 
 
 LOGGER = getLogger(__file__)
-VERIFY_ERROR = r'(.+):\d+ VERIFY ERROR: .+ CN=([0-9.]+)(?:, .+|$)'
-VERIFY_OK = r'(.+):\d+ VERIFY OK: .+ CN=([0-9.]+)(?:, .+|$)'
+VERIFY_ERROR = r'([0-9.]+):\d+ VERIFY ERROR: .+ CN=([0-9.]+)(?:, .+|$)'
+VERIFY_OK = r'(?:[0-9.]+/)?([0-9.]+):\d+ VERIFY OK: .+ CN=([0-9.]+)(?:, .+|$)'
 
 
 def filter_connections(regex: str, records: Iterable[dict]) -> Connections:
@@ -31,11 +31,7 @@ def filter_connections(regex: str, records: Iterable[dict]) -> Connections:
             timestamp = datetime.fromtimestamp(
                 int(record['__REALTIME_TIMESTAMP']) / 1_000_000
             )
-
-            try:
-                result[key][timestamp] = ip_address(ip)
-            except ValueError:
-                LOGGER.error('Garbage record: %s', record['MESSAGE'])
+            result[key][timestamp] = ip_address(ip)
 
     return dict(result)
 
