@@ -7,7 +7,7 @@ from typing import Iterable, Iterator
 from peewee import Select
 
 from emaillib import Mailer
-from hwdb import System
+from hwdb import OperatingSystem, System
 
 from sysnotify.email import generate_emails
 from sysnotify.filtering import failed_connections, successful_connections
@@ -73,6 +73,7 @@ def systems_of_interest() -> Select:
     """Selects systems to migrate to WireGuard."""
 
     return System.select(cascade=True).where(
-        (System.pubkey >> None)
-        & (~(System.openvpn >> None))
+        (~(System.openvpn >> None))
+        & (System.pubkey >> None)
+        & (System.operating_system == OperatingSystem.ARCH_LINUX)
     )
