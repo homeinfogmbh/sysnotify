@@ -29,15 +29,11 @@ def check_systems() -> None:
     config.read(CONFIG_FILE)
     recipients = map(str.strip, config.get('email', 'recipients').split(','))
     records = list(journalctl(OPENVPN_SERVER, since='today', all=True))
-    failures = failed_connections(records)
-    connections = successful_connections(records)
     systems = systems_of_interest()
-    interested_failures = match(systems, failures)
-    interested_connections = match(systems, connections)
     emails = generate_emails(
         recipients,
-        interested_failures,
-        interested_connections
+        match(systems, failed_connections(records)),
+        match(systems, successful_connections(records))
     )
     Mailer.from_config(config).send(emails)
 
