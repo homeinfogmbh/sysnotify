@@ -35,6 +35,8 @@ def add_table(
     table_head = SubElement(table, 'tr')
     header_system_id = SubElement(table_head, 'th')
     header_system_id.text = 'System'
+    header_os = SubElement(table_head, 'th')
+    header_os.text = 'OS'
     header_deployment_id = SubElement(table_head, 'th')
     header_deployment_id.text = 'Deployment'
     header_address = SubElement(table_head, 'th')
@@ -54,6 +56,8 @@ def add_connection(table: Element, connection: SystemConnection) -> None:
     row = SubElement(table, 'tr')
     system_id = SubElement(row, 'td')
     system_id.text = str(connection.system.id)
+    system_os = SubElement(row, 'td')
+    system_os.text = str(connection.system.operating_system)
     deployment_id = SubElement(row, 'td')
     deployment_id.text = str(connection.system.deployment.id)
     address = SubElement(row, 'td')
