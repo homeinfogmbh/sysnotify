@@ -57,7 +57,7 @@ def add_connection(table: Element, connection: SystemConnection) -> None:
     system_id = SubElement(row, 'td')
     system_id.text = str(connection.system.id)
     system_os = SubElement(row, 'td')
-    system_os.text = str(connection.system.operating_system)
+    system_os.text = connection.system.operating_system.value
     deployment_id = SubElement(row, 'td')
     deployment_id.text = str(connection.system.deployment.id)
     address = SubElement(row, 'td')
