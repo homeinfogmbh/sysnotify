@@ -59,9 +59,15 @@ def add_connection(table: Element, connection: SystemConnection) -> None:
     system_os = SubElement(row, 'td')
     system_os.text = connection.system.operating_system.value
     deployment_id = SubElement(row, 'td')
-    deployment_id.text = str(connection.system.deployment.id)
     address = SubElement(row, 'td')
-    address.text = str(connection.system.deployment.address)
+
+    if deployment := connection.system.deployment:
+        deployment_id.text = str(deployment.id)
+        address.text = str(connection.system.deployment.address)
+    else:
+        deployment_id.text = 'N/A'
+        address.text = 'N/A'
+
     timestamp = SubElement(row, 'td')
     timestamp.text = connection.timestamp.isoformat()
     ip_address = SubElement(row, 'td')
