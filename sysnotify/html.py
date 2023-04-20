@@ -29,22 +29,15 @@ def add_table(
 ) -> None:
     """Adds a header and table of system information to the body."""
 
-    header = SubElement(body, 'h1')
-    header.text = title
+    SubElement(body, 'h1').text = title
     table = SubElement(body, 'table')
     table_head = SubElement(table, 'tr')
-    header_system_id = SubElement(table_head, 'th')
-    header_system_id.text = 'System'
-    header_os = SubElement(table_head, 'th')
-    header_os.text = 'OS'
-    header_deployment_id = SubElement(table_head, 'th')
-    header_deployment_id.text = 'Deployment'
-    header_address = SubElement(table_head, 'th')
-    header_address.text = 'Address'
-    header_timestamp = SubElement(table_head, 'th')
-    header_timestamp.text = 'Timestamp'
-    header_ip_address = SubElement(table_head, 'th')
-    header_ip_address.text = 'IP address'
+    SubElement(table_head, 'th').text = 'System'
+    SubElement(table_head, 'th').text = 'OS'
+    SubElement(table_head, 'th').text = 'Deployment'
+    SubElement(table_head, 'th').text = 'Address'
+    SubElement(table_head, 'th').text = 'Timestamp'
+    SubElement(table_head, 'th').text = 'IP address'
 
     for connection in connections:
         add_connection(table, connection)
@@ -54,10 +47,8 @@ def add_connection(table: Element, connection: SystemConnection) -> None:
     """Adds a system connection to the table."""
 
     row = SubElement(table, 'tr')
-    system_id = SubElement(row, 'td')
-    system_id.text = str(connection.system.id)
-    system_os = SubElement(row, 'td')
-    system_os.text = connection.system.operating_system.value
+    SubElement(row, 'td').text = str(connection.system.id)
+    SubElement(row, 'td').text = connection.system.operating_system.value
     deployment_id = SubElement(row, 'td')
     address = SubElement(row, 'td')
 
@@ -68,7 +59,5 @@ def add_connection(table: Element, connection: SystemConnection) -> None:
         deployment_id.text = 'N/A'
         address.text = 'N/A'
 
-    timestamp = SubElement(row, 'td')
-    timestamp.text = connection.timestamp.isoformat()
-    ip_address = SubElement(row, 'td')
-    ip_address.text = str(connection.ip_address)
+    SubElement(row, 'td').text = connection.timestamp.isoformat()
+    SubElement(row, 'td').text = str(connection.ip_address)
