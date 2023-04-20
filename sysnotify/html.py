@@ -54,7 +54,7 @@ def add_connection(table: Element, connection: SystemConnection) -> None:
 
     if deployment := connection.system.deployment:
         deployment_id.text = str(deployment.id)
-        address.text = str(connection.system.deployment.address)
+        address.text = str(deployment.address)
     else:
         deployment_id.text = 'N/A'
         address.text = 'N/A'
