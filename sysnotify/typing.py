@@ -7,7 +7,7 @@ from typing import NamedTuple, Union
 from hwdb import System
 
 
-__all__ = ['Connections', 'IPAddress', 'SystemConnection']
+__all__ = ["Connections", "IPAddress", "SystemConnection"]
 
 
 IPAddress = Union[IPv4Address, IPv6Address]

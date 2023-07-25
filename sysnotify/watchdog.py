@@ -15,11 +15,11 @@ from sysnotify.journalctl import journalctl
 from sysnotify.typing import Connections, IPAddress, SystemConnection
 
 
-__all__ = ['check_systems']
+__all__ = ["check_systems"]
 
 
-CONFIG_FILE = '/usr/local/etc/sysnotify.conf'
-OPENVPN_SERVER = 'openvpn-server@terminals.service'
+CONFIG_FILE = "/usr/local/etc/sysnotify.conf"
+OPENVPN_SERVER = "openvpn-server@terminals.service"
 
 
 def check_systems() -> None:
@@ -27,20 +27,19 @@ def check_systems() -> None:
 
     config = ConfigParser()
     config.read(CONFIG_FILE)
-    recipients = map(str.strip, config.get('email', 'recipients').split(','))
-    records = list(journalctl(OPENVPN_SERVER, since='today', all=True))
+    recipients = map(str.strip, config.get("email", "recipients").split(","))
+    records = list(journalctl(OPENVPN_SERVER, since="today", all=True))
     systems = systems_of_interest()
     emails = generate_emails(
         recipients,
         match(systems, failed_connections(records)),
-        match(systems, successful_connections(records))
+        match(systems, successful_connections(records)),
     )
     Mailer.from_config(config).send(emails)
 
 
 def match(
-        systems: Iterable[System],
-        connections: Connections
+    systems: Iterable[System], connections: Connections
 ) -> Iterator[SystemConnection]:
     """Yields system connections."""
 
@@ -54,15 +53,14 @@ def match(
 
 
 def get_last_connection(
-        system: System,
-        connections: dict[datetime, IPAddress]
+    system: System, connections: dict[datetime, IPAddress]
 ) -> SystemConnection:
     """Returns the last connection of the given system."""
 
     for timestamp in sorted(connections, reverse=True):
         return SystemConnection(system, timestamp, connections[timestamp])
 
-    raise KeyError('No system connection found.')
+    raise KeyError("No system connection found.")
 
 
 def systems_of_interest() -> Select:

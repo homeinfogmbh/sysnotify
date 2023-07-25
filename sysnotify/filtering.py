@@ -10,12 +10,12 @@ from typing import Iterable
 from sysnotify.typing import Connections
 
 
-__all__ = ['failed_connections', 'successful_connections']
+__all__ = ["failed_connections", "successful_connections"]
 
 
 LOGGER = getLogger(__file__)
-VERIFY_ERROR = r'([0-9.]+):\d+ VERIFY ERROR: .+ CN=([0-9.]+)(?:, .+|$)'
-VERIFY_OK = r'(?:[0-9.]+/)?([0-9.]+):\d+ VERIFY OK: .+ CN=([0-9.]+)(?:, .+|$)'
+VERIFY_ERROR = r"([0-9.]+):\d+ VERIFY ERROR: .+ CN=([0-9.]+)(?:, .+|$)"
+VERIFY_OK = r"(?:[0-9.]+/)?([0-9.]+):\d+ VERIFY OK: .+ CN=([0-9.]+)(?:, .+|$)"
 
 
 def filter_connections(regex: str, records: Iterable[dict]) -> Connections:
@@ -26,10 +26,10 @@ def filter_connections(regex: str, records: Iterable[dict]) -> Connections:
     result = defaultdict(dict)
 
     for record in records:
-        if match := fullmatch(regex, record['MESSAGE']):
+        if match := fullmatch(regex, record["MESSAGE"]):
             ip, key = match.groups()
             timestamp = datetime.fromtimestamp(
-                int(record['__REALTIME_TIMESTAMP']) / 1_000_000
+                int(record["__REALTIME_TIMESTAMP"]) / 1_000_000
             )
             result[key][timestamp] = ip_address(ip)
 
